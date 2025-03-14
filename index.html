@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Caption Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        input,
+        button {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        #outputLink {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Upload a Video to Generate Captions</h2>
+
+    <input type="file" id="videoInput" accept="video/*">
+    <button onclick="processVideo()">Generate Captions</button>
+
+    <div id="outputLink">
+        <p>Processed File:</p>
+        <a id="fileLink" href="#" target="_blank">Open Processed Video</a>
+        <br>
+        <a id="audioLink" href="#" target="_blank">Download Audio</a>
+        <br>
+        <a id="videoLink" href="#" target="_blank">Download Video</a>
+    </div>
+
+    <script>
+        async function processVideo() {
+            const fileInput = document.getElementById("videoInput");
+            if (fileInput.files.length === 0) {
+                alert("Please select a video file first.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("video", file);
+
+            // Send the video file to the Python backend
+            const response = await fetch("http://localhost:8081/upload", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Handle the successful response
+                const fileLink = document.getElementById("fileLink");
+                fileLink.href = result.file_path;
+                fileLink.innerText = result.file_name;
+
+                const audioLink = document.getElementById("audioLink");
+                audioLink.href = result.audio_path;
+                audioLink.innerText = result.audio_file;
+
+                const videoLink = document.getElementById("videoLink");
+                videoLink.href = result.video_path;
+                videoLink.innerText = result.video_file;
+
+                // Display the links to the user
+                document.getElementById("outputLink").style.display = "block";
+            } else {
+                // If there's an error, show it to the user
+                alert("Error processing video: " + result.error);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

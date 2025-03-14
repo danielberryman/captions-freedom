@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.wav
+*.srt
+output
+.DS_Store
