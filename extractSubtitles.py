@@ -6,7 +6,7 @@ from vosk import Model, KaldiRecognizer
 from datetime import timedelta
 
 # Paths
-MODEL_PATH = "/Users/danielberryman/Code/models/vosk/vosk-model-small-en-us-0.15"
+MODEL_PATH = "path/to/vosk/vosk-model-small-en-us-0.15"
 
 # 2️⃣ Transcribe Audio to Text using Vosk
 def transcribe_audio(audio_path, model_path, srt_path):

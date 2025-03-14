@@ -78,12 +78,12 @@ def upload_video():
     else:
         print(f"❌ Subtitles extraction failed: {subtitles_path}")
 
-        # Add subtitles to the video
+    # Add subtitles to the video
     output_video_path = video_path.replace(".MOV", "_output.MOV")
     subprocess.run([
         "ffmpeg",
         "-i", video_path, 
-        "-vf", f"subtitles={subtitles_path}", 
+        "-vf", f"subtitles={subtitles_path}:force_style='FontSize=12,Alignment=2'", 
         "-c:a", "copy", 
         output_video_path
     ])
